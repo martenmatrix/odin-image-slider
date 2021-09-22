@@ -26,17 +26,19 @@
 }
 
 .slides .slide {
-    display: none;
+    opacity: 0;
     position: absolute;
     top: 0;
     left: 0;
 
     width: 100%;
     height: 100%;
+    transition: opacity 200ms;
 }
 
 .slides .slide.selected {
-    display: block;
+    transition-delay: 200ms;
+    opacity: 1;
 }
 
 .slides .slide img {
