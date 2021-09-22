@@ -91,11 +91,3 @@ function init() {
 }
 
 init();
-
-//create menu button for images
-
-//slide to right if right button pressed
-
-//slide to left if left button pressed
-
-//slide to corresponing menu slide if menu button pressed
