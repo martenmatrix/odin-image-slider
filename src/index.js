@@ -54,32 +54,37 @@ function createSelectButtonEventListener() {
     slideNavigationDIV.addEventListener('click', getClickedMenuButton);
 }
 
+function moveRight(currentIndex, maxIndex) {
+    let newIndex = currentIndex + 1;
+    if (newIndex > maxIndex) newIndex = 0;
+
+    setSlide(newIndex);
+}
+
+function moveLeft(currentIndex, maxIndex) {
+    let newIndex = currentIndex - 1;
+    if (newIndex < 0) newIndex = maxIndex;
+
+    setSlide(newIndex);
+}
+
+function getCurrentIndex() {
+    const currentImageDIV = document.querySelector('.slides .selected');
+    const indexOfCurrentImage = getIndexOfChildren(imageSlides, currentImageDIV);
+    return indexOfCurrentImage;
+};
+
 function createArrowButtonEventListener() {
-    function getNewIndex(e) {
-        const getCurrentIndex = () => {
-            const currentImageDIV = document.querySelector('.slides .selected');
-            const indexOfCurrentImage = getIndexOfChildren(imageSlides, currentImageDIV);
-            return indexOfCurrentImage;
-        };
-
-        let newIndex = getCurrentIndex();
-        const isRightButton = () => e.currentTarget.classList.contains('right');
-        if (isRightButton()) newIndex += 1;
-        if (!isRightButton()) newIndex -= 1;
-
+    function setNewIndex(e) {
+        const currentIndex = getCurrentIndex();
         const maxIndex = imageSlides.length - 1;
-        if (newIndex > maxIndex) newIndex = 0;
-        if (newIndex < 0) newIndex = maxIndex;
-        return newIndex;
+        const isRightButton = () => e.currentTarget.classList.contains('right');
+        if (isRightButton()) moveRight(currentIndex, maxIndex);
+        if (!isRightButton()) moveLeft(currentIndex, maxIndex);
     }
 
-    function executeRequestedSwitch(e) {
-        const newIndex = getNewIndex(e);
-        setSlide(newIndex);
-    }
-
-    leftArrowButton.addEventListener('click', executeRequestedSwitch);
-    rightArrowButton.addEventListener('click', executeRequestedSwitch);
+    leftArrowButton.addEventListener('click', setNewIndex);
+    rightArrowButton.addEventListener('click', setNewIndex);
 }
 
 function init() {
@@ -88,6 +93,12 @@ function init() {
     markButtonSelected(0);
     createSelectButtonEventListener();
     createArrowButtonEventListener();
+
+    setInterval(() => {
+        const currentIndex = getCurrentIndex();
+        const allSlides = imageSlides.length - 1;
+        moveRight(currentIndex, allSlides);
+    }, 5000);
 }
 
 init();
